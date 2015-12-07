@@ -12,20 +12,28 @@ module MediaInfoLib
     end
     
     def filesize
-      @stream_info["FileSize"].to_i
+      @stream_info["FileSize"].to_i if @stream_info["FileSize"]
     end
     
     def filename
-      File.basename(@stream_info["CompleteName"])
+      File.basename(@stream_info["CompleteName"]) if @stream_info["CompleteName"]
     end
     
     def modified_date
       # libmediainfo returns "UTC 2011-05-04 09:52:15" which gets parsed wrong, appending "UTC" fixes the parsing
-      Time.parse("#{@stream_info["File_Modified_Date"]} UTC")
+      Time.parse("#{@stream_info["File_Modified_Date"]} UTC") if @stream_info["File_Modified_Date"]
     end
     
     def image_count
-      @stream_info["ImageCount"].to_i
+      @stream_info["ImageCount"].to_i if @stream_info["ImageCount"]
+    end
+
+    def duration_ms
+      @stream_info["Duration"].to_i if @stream_info["Duration"]
+    end
+
+    def duration_time_and_frames
+      @stream_info["Duration/String4"]
     end
     
    # mediainfo_attr_reader :codec_id, "Codec ID"
