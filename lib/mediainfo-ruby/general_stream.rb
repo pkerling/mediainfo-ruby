@@ -28,13 +28,7 @@ module MediaInfoLib
       @stream_info["ImageCount"].to_i if @stream_info["ImageCount"]
     end
 
-    def duration_ms
-      @stream_info["Duration"].to_i if @stream_info["Duration"]
-    end
-
-    def duration_time_and_frames
-      @stream_info["Duration/String4"]
-    end
+    include StreamWithDuration
     
    # mediainfo_attr_reader :codec_id, "Codec ID"
    # 

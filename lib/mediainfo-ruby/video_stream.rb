@@ -23,10 +23,6 @@ module MediaInfoLib
       @stream_info["Rotation"].to_f if @stream_info["Rotation"]
     end
     
-    def duration
-      @stream_info["Duration"].to_i if @stream_info["Duration"]
-    end
-    
     def codec
       @stream_info["CodecID"]
     end
@@ -121,6 +117,8 @@ module MediaInfoLib
     def encoded_date
       Time.parse("#{@stream_info["Encoded_Date"]} UTC") if @stream_info["EncodedDate"]
     end
+
+    include StreamWithDuration
     
   end
 end

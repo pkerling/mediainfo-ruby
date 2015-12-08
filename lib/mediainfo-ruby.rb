@@ -19,6 +19,7 @@ module MediaInfoLib
 end
 
 
+require "mediainfo-ruby/stream_with_duration"
 require "mediainfo-ruby/stream"
 require "mediainfo-ruby/general_stream"
 require "mediainfo-ruby/audio_stream"

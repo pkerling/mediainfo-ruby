@@ -33,10 +33,6 @@ module MediaInfoLib
       1 < channels
     end
     
-    def duration
-      @stream_info["Duration"].to_i if @stream_info["Duration"]
-    end
-    
     def bitrate
       @stream_info["BitRate"].to_i if @stream_info["BitRate"]
     end
@@ -65,5 +61,6 @@ module MediaInfoLib
       Time.parse("#{@stream_info["Encoded_Date"]} UTC") if @stream_info["EncodedDate"]
     end
     
+    include StreamWithDuration
   end
 end

@@ -10,3 +10,4 @@ pkg
 
 *.so
 Makefile
+/nbproject/private/
