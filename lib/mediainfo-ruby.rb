@@ -11,15 +11,16 @@ module MediaInfoLib
         @stream_info[infokey]
       end
     end
-    
+
     def date_reader(attribute, infokey)
-      
+
     end
   end
 end
 
 
 require "mediainfo-ruby/stream_with_duration"
+require "mediainfo-ruby/stream_with_delay"
 require "mediainfo-ruby/stream"
 require "mediainfo-ruby/general_stream"
 require "mediainfo-ruby/audio_stream"
@@ -76,9 +77,9 @@ module MediaInfoRubyisms_Streams
 	def menu_streams ; self.count_get(MediaInfoLib_StreamKind::Menu, -1); end
 
 	# Returns a map of all the possible option definitions,
-	# where the key is the option we can ask for and the 
+	# where the key is the option we can ask for and the
 	# value is the help for that option.
-	# By default, anything marked as deprecated in the underlying 
+	# By default, anything marked as deprecated in the underlying
 	# library is removed.
 	def option_definitions
 		option_map = {:general=>{}}
@@ -86,7 +87,7 @@ module MediaInfoRubyisms_Streams
 		switching = true
 		current_map = option_map[:general]
 
-		option_defs = parameters_csv.each_line{|row| 
+		option_defs = parameters_csv.each_line{|row|
 			if row.strip == ""
 				switching = true
 			else
@@ -107,7 +108,7 @@ module MediaInfoRubyisms_Streams
 		}
 		option_map
 	end
-	
+
 	def parameters_csv
 		params_csv = self.option("Info_Parameters_CSV", "")
 		if RUBY_PLATFORM =~ /darwin/
@@ -116,7 +117,7 @@ module MediaInfoRubyisms_Streams
 		params_csv
 	end
 
-	# It introspects a video. This means returning a map of all the 
+	# It introspects a video. This means returning a map of all the
 	# values for a definition. By default empty values are not returned.
 	# Send with true to return empty values
 	def introspect
@@ -140,7 +141,7 @@ private
 		result = {}
 		topic_parameters.each{|key, value|
 			value = self.get_value(kind_constant, stream_index, key, MediaInfoLib_InfoKind::Text, MediaInfoLib_InfoKind::Name)
-	
+
 			if self.empty_values == true || value.length > 0
 				result[key] = value
 			end
@@ -151,17 +152,17 @@ private
 		}
 		result
 	end
-  
+
 end
 
 
 module MediaInfoLib
 
   class MediaInfo
-  
+
     SECTIONS             = [:general, :video, :audio, :image, :menu, :text]
     STREAM_SECTIONS      = SECTIONS - [:general]
-    
+
     STREAM_TYPES_MAP = {
       :general => MediaInfoLib::GeneralStream,
       :video => MediaInfoLib::VideoStream,
@@ -170,34 +171,34 @@ module MediaInfoLib
       :menu => MediaInfoLib::MenuStream,
       :text => MediaInfoLib::TextStream
     }
-  
+
     #def initialize(path = nil)
     #  self.open(path) unless path.nil?
     #end
 
     def open(path)
       empty_values = true
-      
+
       res = _open(path)
       raise Errno::ENOENT if 0 == res
-    
+
       (yield self; close) if block_given?
-    
+
       self
     end
- 
+
     def streams
       streams = {
       }
-      introspect.each do |k, v| 
+      introspect.each do |k, v|
         next if STREAM_TYPES_MAP[k].nil? || v.nil? || v.empty?
-        
+
         if v.respond_to? :to_ary
           streams[k] = v.map {|s| STREAM_TYPES_MAP[k].new(s)}
         else
           streams[k] = STREAM_TYPES_MAP[k].new(v)
         end
-        
+
       end
       streams
     end
@@ -209,7 +210,7 @@ module MediaInfoLib
     def video?
       (!streams[:video].nil? && streams[:video].count > 0)
     end
-    
+
     def video
       streams[:video].first unless streams[:video].nil?
     end
@@ -217,35 +218,35 @@ module MediaInfoLib
     def audio?
       (!streams[:audio].nil? && streams[:audio].count > 0)
     end
-  
+
     def audio
       streams[:audio].first unless streams[:audio].nil?
     end
-    
+
     def image?
       !streams[:image].nil?
     end
-  
+
     def text?
       !streams[:text].nil?
     end
-    
+
     def menu?
       !streams[:menu].nil?
     end
-    
+
     def close
       _close()
     end
-  
+
     def option(param1, param2) # TODO: WHAT ARE THOSE?
       _option(param1, param2)
     end
-  
+
     def version()
       option("Info_Version", "").sub /MediaInfoLib - v/, ""
     end
-  
+
   	include(MediaInfoRubyisms_Streams)
   end
 end

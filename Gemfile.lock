@@ -1,15 +1,21 @@
 PATH
   remote: .
   specs:
-    mediainfo-ruby (0.2.0)
+    mediainfo-ruby (0.3.0)
       rice
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
+    coderay (1.1.0)
     diff-lcs (1.1.2)
+    method_source (0.8.2)
+    pry (0.10.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rake (0.8.7)
-    rice (1.4.2)
+    rice (2.0.0)
     riot (0.12.3)
       rr
     rr (1.0.2)
@@ -21,12 +27,14 @@ GEM
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
+    slop (3.6.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   mediainfo-ruby!
+  pry
   rake
   riot
   rspec
